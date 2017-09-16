@@ -25,6 +25,8 @@ public:
     void setDateFrom(QDate date);
     void setDateFto(QDate date);
     void setSize(QVector2D size);
+    void setQuantity(int quantity);
+    void getPhoto();
 
 signals:
     void gotLinks(QList<QUrl>);
@@ -43,6 +45,7 @@ private:
     QDate m_dateFrom;
     QDate m_dateTo;
     int m_dCounter;
+    int m_quantity;
 
     QString genName();
 };

@@ -5,8 +5,6 @@ QHtmlParser::QHtmlParser(QObject *parent, QDate dateFrom) : QObject(parent){
     m_dateTo = QDate::currentDate();
     m_downloader = new Downloader(nullptr, "");
     m_downloader->setUrl("http://api-fotki.yandex.ru/api/recent/updated;" + QString::number(m_dateFrom.year()) + "-" + QString::number(m_dateFrom.month()) + "-" + QString::number(m_dateFrom.day()) + "T14:59:24Z,567023,31779780/");
-    m_downloader->get();
-
     setSize(800, 600);
 
     m_dCounter = 0;
@@ -75,10 +73,12 @@ void QHtmlParser::savePhoto(QByteArray data){
         m_dateFrom.setDate(m_dateFrom.year(), m_dateFrom.month(), m_dateFrom.day() + 1);
         if (m_dateFrom == m_dateTo){
             qDebug() << "(D)Done!";
+            emit isDone();
             return;
         }
-        else if (m_dCounter == 10000){
+        else if (m_dCounter == m_quantity){
             qDebug() << "(Q)Done!";
+            emit isDone();
             return;
         }
         m_downloader->setUrl("http://api-fotki.yandex.ru/api/recent/updated;" + QString::number(m_dateFrom.year()) + "-" + QString::number(m_dateFrom.month()) + "-" + QString::number(m_dateFrom.day()) + "T14:59:24Z,567023,31779780/");
@@ -100,6 +100,12 @@ QString QHtmlParser::genName(){
         res.append(s[qrand() % 61]);
     }
     return res;
+}
+void QHtmlParser::setQuantity(int quantity){
+    m_quantity = quantity;
+}
+void QHtmlParser::getPhoto(){
+    m_downloader->get();
 }
 
 void QHtmlParser::setSize(int width, int height){
