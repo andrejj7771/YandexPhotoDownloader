@@ -99,3 +99,11 @@ QString QHtmlParser::genName(){
     }
     return res;
 }
+
+void QHtmlParser::setSize(int width, int height){
+    m_photoSize.setX(width);
+    m_photoSize.setY(height);
+}
+void QHtmlParser::setSize(QVector2D size){
+    m_photoSize = size;
+}
