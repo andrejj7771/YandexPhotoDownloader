@@ -7,6 +7,8 @@ QHtmlParser::QHtmlParser(QObject *parent, QDate dateFrom) : QObject(parent){
     m_downloader->setUrl("http://api-fotki.yandex.ru/api/recent/updated;" + QString::number(m_dateFrom.year()) + "-" + QString::number(m_dateFrom.month()) + "-" + QString::number(m_dateFrom.day()) + "T14:59:24Z,567023,31779780/");
     m_downloader->get();
 
+    setSize(800, 600);
+
     m_dCounter = 0;
 
     if (!QDir().exists(QDir::homePath() + "/photos"))
