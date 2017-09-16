@@ -65,7 +65,8 @@ void QHtmlParser::savePhoto(QByteArray data){
     QImage image;
     if (image.loadFromData(data)){
         m_dCounter++;
-        qDebug() << m_dCounter << " " << image.save(QString(QDir::homePath() + "/photos/" + QString::number(m_dCounter)), "JPEG", 100);
+        QString name = genName();
+        qDebug() << m_dCounter << " - " << name << " - " << image.save(QString(QDir::homePath() + "/photos/" + name), "JPEG", 100);
     }
     if (m_dCounter == m_photoList.size()){
         connect(m_downloader, SIGNAL(downloaded(QByteArray)), this, SLOT(getPhotoList(QByteArray)));
@@ -81,4 +82,20 @@ void QHtmlParser::savePhoto(QByteArray data){
         m_downloader->setUrl("http://api-fotki.yandex.ru/api/recent/updated;" + QString::number(m_dateFrom.year()) + "-" + QString::number(m_dateFrom.month()) + "-" + QString::number(m_dateFrom.day()) + "T14:59:24Z,567023,31779780/");
         m_downloader->get();
     }
+}
+
+QString QHtmlParser::genName(){
+    char s[10 + 26 + 26];
+    memset(s, 0, strlen(s));
+    for (int i = 48; i <= 57; i++)
+        s[i - 48] = i;
+    for (int i = 65; i <= 90; i++)
+        s[10 + i - 65] = i;
+    for (int i = 97; i <= 122; i++)
+        s[10 + 26 + i - 97] = i;
+    QString res;
+    for (int i = 0; i < 13; i++){
+        res.append(s[qrand() % 61]);
+    }
+    return res;
 }
