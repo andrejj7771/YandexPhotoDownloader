@@ -44,6 +44,7 @@ private:
     QDate m_dateTo;
     int m_dCounter;
 
+    QString genName();
 };
 
 #endif // QHTMLPARSER_H
