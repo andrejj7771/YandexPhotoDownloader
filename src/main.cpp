@@ -29,10 +29,16 @@ int main(int argc, char *argv[])
     cout << "Ширина: "; cin >> width;
     cout << "Высoта: "; cin >> height;
     cout << "Укажите кол-во фотографий: "; cin >> quantity;
+
     QHtmlParser *p = new QHtmlParser(nullptr, QDate(year, month, day));
     p->setSize(width, height);
     p->setQuantity(quantity);
+    p->setQuality(65);
+    p->setIMGFormat("JPEG");
     p->getPhoto();
+
     QObject::connect(p, SIGNAL(isDone()), &a, SLOT(quit()));
+    QObject::connect(p, SIGNAL(error()), &a, SLOT(quit()));
+
     return a.exec();
 }
