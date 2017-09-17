@@ -61,6 +61,7 @@ void QHtmlParser::downloadPhotos(QList<QUrl> list){
 void QHtmlParser::savePhoto(QByteArray data){
     if (m_photoList.isEmpty()){
         qDebug() << "There is no photos";
+        emit error();
         return;
     }
     QImage image;
@@ -68,7 +69,7 @@ void QHtmlParser::savePhoto(QByteArray data){
         m_dCounter++;
         m_lCounter++;
         QString name = genName();
-        qDebug() << m_dCounter << " - " << name << " - " << image.save(QString(QDir::homePath() + "/photos/" + name), "JPEG", 100);
+        qDebug() << m_dCounter << " - " << name << " - " << image.save(QString(QDir::homePath() + "/photos/" + name), m_imageFormat.toStdString().c_str(), m_quality);
     }
     if (m_dateFrom == m_dateTo){
         qDebug() << "(D)Done!";
@@ -88,6 +89,12 @@ void QHtmlParser::savePhoto(QByteArray data){
         m_downloader->setUrl("http://api-fotki.yandex.ru/api/recent/updated;" + QString::number(m_dateFrom.year()) + "-" + QString::number(m_dateFrom.month()) + "-" + QString::number(m_dateFrom.day()) + "T14:59:24Z,567023,31779780/");
         m_downloader->get();
     }
+}
+void QHtmlParser::setQuality(int quality){
+    m_quality = quality;
+}
+void QHtmlParser::setIMGFormat(QString format){
+    m_imageFormat = format;
 }
 
 QString QHtmlParser::genName(){
