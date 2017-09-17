@@ -46,6 +46,7 @@ private:
     QDate m_dateTo;
     int m_dCounter;
     int m_quantity;
+    int m_lCounter;
 
     QString genName();
 };

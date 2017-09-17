@@ -8,6 +8,7 @@ QHtmlParser::QHtmlParser(QObject *parent, QDate dateFrom) : QObject(parent){
     setSize(800, 600);
 
     m_dCounter = 0;
+    m_lCounter = 0;
 
     if (!QDir().exists(QDir::homePath() + "/photos"))
         QDir().mkdir(QDir::homePath() + "/photos");
@@ -65,22 +66,25 @@ void QHtmlParser::savePhoto(QByteArray data){
     QImage image;
     if (image.loadFromData(data)){
         m_dCounter++;
+        m_lCounter++;
         QString name = genName();
         qDebug() << m_dCounter << " - " << name << " - " << image.save(QString(QDir::homePath() + "/photos/" + name), "JPEG", 100);
     }
-    if (m_dCounter == m_photoList.size()){
+    if (m_dateFrom == m_dateTo){
+        qDebug() << "(D)Done!";
+        emit isDone();
+        return;
+    }
+    else if (m_dCounter == m_quantity){
+        qDebug() << "(Q)Done!";
+        emit isDone();
+        return;
+    }
+    if (m_lCounter == m_photoList.size()){
         connect(m_downloader, SIGNAL(downloaded(QByteArray)), this, SLOT(getPhotoList(QByteArray)));
         m_dateFrom.setDate(m_dateFrom.year(), m_dateFrom.month(), m_dateFrom.day() + 1);
-        if (m_dateFrom == m_dateTo){
-            qDebug() << "(D)Done!";
-            emit isDone();
-            return;
-        }
-        else if (m_dCounter == m_quantity){
-            qDebug() << "(Q)Done!";
-            emit isDone();
-            return;
-        }
+
+        m_lCounter = 0;
         m_downloader->setUrl("http://api-fotki.yandex.ru/api/recent/updated;" + QString::number(m_dateFrom.year()) + "-" + QString::number(m_dateFrom.month()) + "-" + QString::number(m_dateFrom.day()) + "T14:59:24Z,567023,31779780/");
         m_downloader->get();
     }
@@ -96,7 +100,7 @@ QString QHtmlParser::genName(){
     for (int i = 97; i <= 122; i++)
         s[10 + 26 + i - 97] = i;
     QString res;
-    for (int i = 0; i < 13; i++){
+    for (int i = 0; i < 50; i++){
         res.append(s[qrand() % 61]);
     }
     return res;
