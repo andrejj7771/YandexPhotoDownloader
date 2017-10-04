@@ -1,5 +1,5 @@
-#ifndef QHTMLPARSER_H
-#define QHTMLPARSER_H
+#ifndef QXMLPARSER_H
+#define QXMLPARSER_H
 
 #include "downloader.h"
 
@@ -12,12 +12,12 @@
 #include <QDate>
 #include <QDir>
 
-class QHtmlParser : public QObject
+class QXmlParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit QHtmlParser(QObject *parent = nullptr, QDate dateFrom = QDate());
-    ~QHtmlParser();
+    explicit QXmlParser(QObject *parent = nullptr, QDate dateFrom = QDate());
+    ~QXmlParser();
 
     void setDateFrom(int y, int m, int d);
     void setDateTo(int y, int m, int d);

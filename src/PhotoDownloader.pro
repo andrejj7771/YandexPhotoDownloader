@@ -10,7 +10,7 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    qhtmlparser.cpp \
+    qxmlparser.cpp \
     downloader.cpp
 
 # The following define makes your compiler emit warnings if you use
@@ -25,5 +25,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
-    qhtmlparser.h \
+    qxmlparser.h \
     downloader.h
