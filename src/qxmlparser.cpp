@@ -1,6 +1,6 @@
-#include "qhtmlparser.h"
+#include "qxmlparser.h"
 
-QHtmlParser::QHtmlParser(QObject *parent, QDate dateFrom) : QObject(parent){
+QXmlParser::QXmlParser(QObject *parent, QDate dateFrom) : QObject(parent){
     m_dateFrom = dateFrom;
     m_dateTo = QDate::currentDate();
     m_downloader = new Downloader(nullptr, "");
@@ -17,11 +17,11 @@ QHtmlParser::QHtmlParser(QObject *parent, QDate dateFrom) : QObject(parent){
     connect(m_downloader, SIGNAL(downloaded(QByteArray)), this, SLOT(savePhoto(QByteArray)));
     connect(this, SIGNAL(gotLinks(QList<QUrl>)), this, SLOT(downloadPhotos(QList<QUrl>)));
 }
-QHtmlParser::~QHtmlParser(){
+QXmlParser::~QXmlParser(){
     delete m_downloader;
 }
 
-void QHtmlParser::getPhotoList(QByteArray data){
+void QXmlParser::getPhotoList(QByteArray data){
     QXmlStreamReader reader(data);
 
     while (!reader.hasError() && !reader.atEnd()) {
@@ -48,7 +48,7 @@ void QHtmlParser::getPhotoList(QByteArray data){
     emit gotLinks(m_photoList);
 }
 
-void QHtmlParser::downloadPhotos(QList<QUrl> list){
+void QXmlParser::downloadPhotos(QList<QUrl> list){
     qDebug() << list.size();
     auto it = list.begin();
     while (it != list.end()) {
@@ -58,7 +58,7 @@ void QHtmlParser::downloadPhotos(QList<QUrl> list){
         it++;
     }
 }
-void QHtmlParser::savePhoto(QByteArray data){
+void QXmlParser::savePhoto(QByteArray data){
     if (m_photoList.isEmpty()){
         qDebug() << "There is no photos";
         emit error();
@@ -90,14 +90,14 @@ void QHtmlParser::savePhoto(QByteArray data){
         m_downloader->get();
     }
 }
-void QHtmlParser::setQuality(int quality){
+void QXmlParser::setQuality(int quality){
     m_quality = quality;
 }
-void QHtmlParser::setIMGFormat(QString format){
+void QXmlParser::setIMGFormat(QString format){
     m_imageFormat = format;
 }
 
-QString QHtmlParser::genName(){
+QString QXmlParser::genName(){
     char s[10 + 26 + 26];
     memset(s, 0, strlen(s));
     for (int i = 48; i <= 57; i++)
@@ -112,17 +112,17 @@ QString QHtmlParser::genName(){
     }
     return res;
 }
-void QHtmlParser::setQuantity(int quantity){
+void QXmlParser::setQuantity(int quantity){
     m_quantity = quantity;
 }
-void QHtmlParser::getPhoto(){
+void QXmlParser::getPhoto(){
     m_downloader->get();
 }
 
-void QHtmlParser::setSize(int width, int height){
+void QXmlParser::setSize(int width, int height){
     m_photoSize.setX(width);
     m_photoSize.setY(height);
 }
-void QHtmlParser::setSize(QVector2D size){
+void QXmlParser::setSize(QVector2D size){
     m_photoSize = size;
 }
